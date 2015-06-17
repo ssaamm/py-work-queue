@@ -5,8 +5,6 @@ from job import Job
 
 job_kinds_this_can_handle = {'square_it', 'wait_around'}
 
-pool = Pool(processes=2)
-
 def handle_job(job):
     if job.kind == 'square_it':
         squared = job.data ** 2
@@ -20,6 +18,8 @@ def handle_job(job):
 def handle_message(channel, method, properties, body):
     job = Job.from_json(body)
     pool.apply_async(handle_job, [job])
+
+pool = Pool(processes=2)
 
 if __name__ == '__main__':
     exchange = 'jobs'
